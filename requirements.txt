@@ -1,0 +1,45 @@
+# Core Dependencies
+praw>=7.7.1                    # Reddit API wrapper
+google-generativeai>=0.3.0     # Gemini AI
+google-cloud-texttospeech>=2.14.0  # Google Cloud TTS
+google-api-python-client>=2.100.0  # Google Drive/YouTube API
+google-auth-oauthlib>=1.1.0    # OAuth for Google APIs
+google-auth-httplib2>=0.1.1
+
+# Video/Audio Processing
+moviepy>=1.0.3                 # Video editing
+pydub>=0.25.1                  # Audio processing
+numpy>=1.24.0                  # Array operations
+
+# Database
+sqlalchemy>=2.0.0              # ORM
+psycopg2-binary>=2.9.9         # PostgreSQL driver
+alembic>=1.12.0                # Database migrations
+
+# AWS
+boto3>=1.28.0                  # AWS SDK (for SES email)
+
+# HTTP/Async
+httpx>=0.25.0                  # HTTP client
+aiofiles>=23.2.0               # Async file operations
+
+# Utilities
+python-dotenv>=1.0.0           # Environment variables
+schedule>=1.2.0                # Job scheduling (backup to cron)
+tenacity>=8.2.0                # Retry logic
+python-dateutil>=2.8.2         # Date utilities
+pytz>=2023.3                   # Timezone handling
+
+# Logging
+watchtower>=3.0.1              # CloudWatch logging
+
+# Text Processing
+better-profanity>=0.7.0        # Fallback profanity filter
+
+# Testing
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
+pytest-cov>=4.1.0
+
+# Type hints
+typing-extensions>=4.8.0
