@@ -1,0 +1,99 @@
+[tool.poetry]
+name = "ai-slop"
+version = "0.1.0"
+description = "Automated Reddit story to video pipeline for YouTube Shorts and Instagram Reels"
+authors = ["Your Name <your.email@example.com>"]
+readme = "README.md"
+packages = [{include = "src"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+
+
+# Google AI (Gemini)
+google-generativeai = "^0.8.6"
+
+# Edge TTS (Free, Natural Voices)
+edge-tts = "^6.1.9"
+
+# Google APIs (Drive, YouTube)
+google-api-python-client = "^2.100.0"
+google-auth-oauthlib = "^1.1.0"
+google-auth-httplib2 = "^0.1.1"
+
+# Video/Audio Processing
+moviepy = "^1.0.3"
+pydub = "^0.25.1"
+numpy = "^1.24.0"
+
+# Database
+sqlalchemy = "^2.0.0"
+psycopg2-binary = "^2.9.9"
+alembic = "^1.12.0"
+
+
+
+# HTTP/Async
+httpx = "^0.25.0"
+aiofiles = "^23.2.0"
+
+# Utilities
+python-dotenv = "^1.0.0"
+schedule = "^1.2.0"
+tenacity = "^8.2.0"
+python-dateutil = "^2.8.2"
+pytz = "^2023.3"
+
+# Logging
+watchtower = "^3.0.1"
+
+# Text Processing
+better-profanity = "^0.7.0"
+
+# Type hints
+typing-extensions = "^4.8.0"
+asyncpg = "^0.31.0"
+openai = "^2.14.0"
+groq = "^1.0.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.0"
+pytest-asyncio = "^0.21.0"
+pytest-cov = "^4.1.0"
+black = "^23.0.0"
+isort = "^5.12.0"
+mypy = "^1.5.0"
+ruff = "^0.1.0"
+
+[tool.poetry.scripts]
+ai-slop = "src.main:main"
+youtube-queue = "src.uploaders.youtube_queue_processor:main"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 100
+target-version = ['py311']
+include = '\.pyi?$'
+
+[tool.isort]
+profile = "black"
+line_length = 100
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+select = ["E", "F", "W", "I", "N", "UP", "B", "C4"]
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_ignores = true
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
