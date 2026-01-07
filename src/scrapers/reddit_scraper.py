@@ -104,18 +104,27 @@ class RedditScraper:
                         for post in posts:
                             # 1. Filter checks
                             if post.score < settings.MIN_UPVOTES:
+                                logger.debug(f"Skipping post {post.id}: Score {post.score} < {settings.MIN_UPVOTES}")
                                 continue
                                 
                             if post.stickied or post.distinguished:
+                                logger.debug(f"Skipping post {post.id}: Stickied/Distinguished")
                                 continue
                                 
                             # Check if already processed
                             existing = await queries.get_story_by_reddit_id(post.id)
                             if existing:
+                                logger.debug(f"Skipping post {post.id}: Already in database")
                                 continue
                                 
                             # Basic content validation (ignore image-only posts)
-                            if not post.selftext or len(post.selftext.split()) < 50:
+                            if not post.selftext:
+                                logger.debug(f"Skipping post {post.id}: No text content")
+                                continue
+                                
+                            word_count = len(post.selftext.split())
+                            if word_count < 50:
+                                logger.debug(f"Skipping post {post.id}: Content too short ({word_count} words)")
                                 continue
 
                             # 2. Store to DB
