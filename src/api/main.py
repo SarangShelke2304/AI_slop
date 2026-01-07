@@ -23,6 +23,7 @@ class PipelineState:
         self.progress = 0
         self.total_parts = 0
         self.current_stage = "Idle"
+        self.current_task: Optional[asyncio.Task] = None
 
 state = PipelineState()
 
@@ -36,12 +37,17 @@ async def background_pipeline_wrapper():
         await run_pipeline()
         state.last_run_end = datetime.now()
         state.current_stage = "Completed"
+    except asyncio.CancelledError:
+        logger.info("Pipeline task was cancelled.")
+        state.last_error = "Cancelled by user"
+        state.current_stage = "Cancelled"
     except Exception as e:
         logger.error(f"API Background Task Failed: {e}")
         state.last_error = str(e)
         state.current_stage = "Failed"
     finally:
         state.is_running = False
+        state.current_task = None
 
 @app.get("/health")
 def health_check():
@@ -58,15 +64,26 @@ def get_status():
     }
 
 @app.post("/run")
-async def trigger_run(background_tasks: BackgroundTasks):
+async def trigger_run():
     if state.is_running:
         return JSONResponse(
             status_code=400,
             content={"message": "Pipeline is already running."}
         )
     
-    background_tasks.add_task(background_pipeline_wrapper)
+    state.current_task = asyncio.create_task(background_pipeline_wrapper())
     return {"message": "Pipeline triggered successfully."}
+
+@app.post("/stop")
+async def stop_run():
+    if not state.is_running or not state.current_task:
+        return JSONResponse(
+            status_code=400,
+            content={"message": "No pipeline is currently running."}
+        )
+    
+    state.current_task.cancel()
+    return {"message": "Stop signal sent to pipeline."}
 
 @app.get("/logs")
 def get_logs(lines: int = 100):
